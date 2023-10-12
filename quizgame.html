@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #FFFFFF;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='212' height='212' viewBox='0 0 800 800'%3E%3Cg fill='none' stroke='%23313131' stroke-width='1'%3E%3Cpath d='M769 229L1037 260.9M927 880L731 737 520 660 309 538 40 599 295 764 126.5 879.5 40 599-197 493 102 382-31 229 126.5 79.5-69-63'/%3E%3Cpath d='M-31 229L237 261 390 382 603 493 308.5 537.5 101.5 381.5M370 905L295 764'/%3E%3Cpath d='M520 660L578 842 731 737 840 599 603 493 520 660 295 764 309 538 390 382 539 269 769 229 577.5 41.5 370 105 295 -36 126.5 79.5 237 261 102 382 40 599 -69 737 127 880'/%3E%3Cpath d='M520-140L578.5 42.5 731-63M603 493L539 269 237 261 370 105M902 382L539 269M390 382L102 382'/%3E%3Cpath d='M-222 42L126.5 79.5 370 105 539 269 577.5 41.5 927 80 769 229 902 382 603 493 731 737M295-36L577.5 41.5M578 842L295 764M40-201L127 80M102 382L-261 269'/%3E%3C/g%3E%3Cg fill='%23818181'%3E%3Ccircle cx='769' cy='229' r='6'/%3E%3Ccircle cx='539' cy='269' r='6'/%3E%3Ccircle cx='603' cy='493' r='6'/%3E%3Ccircle cx='731' cy='737' r='6'/%3E%3Ccircle cx='520' cy='660' r='6'/%3E%3Ccircle cx='309' cy='538' r='6'/%3E%3Ccircle cx='295' cy='764' r='6'/%3E%3Ccircle cx='40' cy='599' r='6'/%3E%3Ccircle cx='102' cy='382' r='6'/%3E%3Ccircle cx='127' cy='80' r='6'/%3E%3Ccircle cx='370' cy='105' r='6'/%3E%3Ccircle cx='578' cy='42' r='6'/%3E%3Ccircle cx='237' cy='261' r='6'/%3E%3Ccircle cx='390' cy='382' r='6'/%3E%3C/g%3E%3C/svg%3E");
+        }
+    
+        .container {
+            text-align: center;
+            max-width: 400px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+        }
+    
+        .quiz-container {
+            /*max-width: 400px;  Set the maximum width */
+            width: 400px; /* Make it 100% wide within the maximum width */
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            text-align: center;
+            margin: 0 auto;
+        }
+    
+        .title {
+            font-size: 36px; /* Increase title font size */
+            margin-bottom: 20px; /* Increase margin */
+        }
+    
+        .question {
+            font-size: 30px; /* Increase question font size */
+            margin-bottom: 20px; /* Increase margin */
+        }
+    
+        .user-answer {
+            font-size: 24px; /* Increase input font size */
+            padding: 10px 0; /* Increase padding */
+            margin-bottom: 20px; /* Increase margin */
+            width: 100%; /* Make the input box 100% wide */
+        }
+    
+        .submit {
+            font-size: 20px; /* Increase submit button font size */
+            margin-top: 20px;
+            padding: 12px 0; /* Increase button padding */
+            background-color: #b1b1b1;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            width: 100%; /* Make the button 100% wide */
+        }
+    
+        .submit:hover {
+            background-color: #000000;
+        }
+    
+        .timer-container {
+            font-size: 20px; /* Increase timer font size */
+            padding: 10px;
+            margin-bottom: 20px; /* Increase margin */
+        }
+    
+        .result-container {
+            display: none;
+            margin-top: 20px;
+        }
+    
+        .score {
+            font-size: 24px; /* Increase score font size */
+            margin-bottom: 20px; /* Increase margin */
+        }
+    
+        .menu-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+    
+        .menu-button {
+            font-size: 20px; /* Increase menu button font size */
+            padding: 10px 15px; /* Increase button padding */
+            background-color: #b1b1b1;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px; /* Increase margin */
+        }
+    
+        .menu-button:hover {
+            background-color: #000000;
+        }
+    
+        .retry-button {
+            font-size: 20px; /* Increase retry button font size */
+            padding: 10px 15px; /* Increase button padding */
+            background-color: #b1b1b1;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px; /* Increase margin */
+        }
+    
+        .retry-button:hover {
+            background-color: #000000;
+        }
+    
+        .correct-answers {
+            font-size: 20px; /* Increase correct answers font size */
+            margin-top: 20px;
+            display: none;
+        }
+    
+        .correct-answers-dropdown {
+            max-width: 100%; /* Adjust the max-width as needed */
+        }
+    </style>
+    
+</head>
+<body>
+    <div id="menu-container" class="container">
+        <h1 class="title">Quiz</h1>
+        <label for="username">Enter your name:</label>
+        <input type="text" id="username" class="user-answer" autofocus>
+        <button id="start-button" class="menu-button">Start Quiz</button>
+        </div>
+        <div id="quiz-container" class="container" style="display: none;">
+        <h1 class="title">Quiz</h1>
+        <div id="question" class="question"></div>
+        <div id="choices" class="choices"></div>
+        <input type="text" id="user-answer" class="user-answer" autofocus>
+        <button id="submit" class="submit">Submit</button>
+        <div id="timer-container" class="timer-container">
+            Timer: <span id="countdown">20</span> seconds
+        </div>
+        <div id="result-container" class="result-container">
+            <span id="user-name-display" class="user-name"></span>
+            <div id="score" class="score"></div>
+            <button id="retry-button" class="retry-button">Retry Quiz</button>
+        </div>
+        <div id="correct-answers" class="correct-answers">
+            <h2>Correct Answers</h2>
+            <select id="correct-answers-dropdown" size="5" class="correct-answers-dropdown"></select>
+        </div>
+    </div>
+    <script>
+        let currentQuestionIndex = 0;
+        const menuContainer = document.getElementById('menu-container');
+        const quizContainer = document.getElementById('quiz-container');
+        const question = document.getElementById('question');
+        const choicesContainer = document.getElementById('choices');
+        const userAnswer = document.getElementById('user-answer');
+        const submit = document.getElementById('submit');
+        const startButton = document.getElementById('start-button');
+        const retryButton = document.getElementById('retry-button');
+        const timerContainer = document.getElementById('timer-container');
+        const resultContainer = document.getElementById('result-container');
+        const score = document.getElementById('score');
+        const countdownElement = document.getElementById('countdown');
+        const usernameInput = document.getElementById('username');
+        const correctAnswersDropdown = document.getElementById('correct-answers-dropdown');
+        const correctAnswersContainer = document.getElementById('correct-answers');
+
+        const quizQuestions = [
+        
+        {
+            "type": "multiplechoice",
+            "question": "Which of the following is an operating system?",
+            "choices": ["Microsoft Word", "Linux", "Microsoft Excel", "Adobe Photoshop"],
+            "answer": "Linux"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What is the main function of a GPU in a computer?",
+            "choices": ["Displaying text", "Running web browsers", "Handling graphics and video", "Managing network connections"],
+            "answer": "Handling graphics and video"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What is a firewall used for in computer security?",
+            "choices": ["Storing passwords", "Blocking unauthorized access", "Sending emails", "Creating spreadsheets"],
+            "answer": "Blocking unauthorized access"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What is the most common programming language used for web development?",
+            "choices": ["Java", "C++", "Python", "HTML/CSS/JavaScript"],
+            "answer": "HTML/CSS/JavaScript"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What does HTML stand for?",
+            "choices": ["Hypertext Markup Language", "Hyperlink and Text Markup Language", "Highly Technical Machine Language", "Home Tool Markup Language"],
+            "answer": "Hypertext Markup Language"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What is a computer virus?",
+            "choices": ["A type of computer", "Malicious software that can damage or disrupt a computer system", "A physical component of a computer", "A type of computer game"],
+            "answer": "Malicious software that can damage or disrupt a computer system"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "Which company developed the Windows operating system?",
+            "choices": ["Apple", "Microsoft", "Google", "IBM"],
+            "answer": "Microsoft"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What is the primary function of an operating system?",
+            "choices": ["Playing games", "Managing hardware components", "Creating documents", "Editing images"],
+            "answer": "Managing hardware components"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "Which programming language is often used for artificial intelligence and machine learning?",
+            "choices": ["Java", "C", "Python", "Fortran"],
+            "answer": "Python"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What does CPU clock speed, measured in Hertz, indicate?",
+            "choices": ["The number of CPU cores", "The physical size of the CPU", "The CPU's processing power", "The speed at which instructions are executed"],
+            "answer": "The speed at which instructions are executed"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What does 'URL' stand for?",
+            "choices": ["Uniform Resource Locator", "Universal Resource Language", "Unified Router Link", "User-Defined Reference Link"],
+            "answer": "Uniform Resource Locator"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "Which of the following is not an input device?",
+            "choices": ["Keyboard", "Monitor", "Mouse", "Microphone"],
+            "answer": "Monitor"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What is a computer network?",
+            "choices": ["A group of interconnected computers", "A type of computer virus", "An email address", "A virtual reality game"],
+            "answer": "A group of interconnected computers"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What is open-source software?",
+            "choices": ["Software that is free to use", "Software with a closed and locked source code", "Software that can only run on Apple devices", "Software that is no longer supported"],
+            "answer": "Software with a closed and locked source code"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What is the primary function of an email client program?",
+            "choices": ["Playing music", "Playing video games", "Sending and receiving emails", "Editing photos"],
+            "answer": "Sending and receiving emails"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What is the purpose of a cache in a computer?",
+            "choices": ["To store user data", "To speed up data access", "To protect against viruses", "To display graphics"],
+            "answer": "To speed up data access"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What is a motherboard in a computer?",
+            "choices": ["The main computer display", "A device for video editing", "The central circuit board that connects all hardware components", "A type of software"],
+            "answer": "The central circuit board that connects all hardware components"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "Which company developed the Android operating system?",
+            "choices": ["Apple", "Microsoft", "Google", "Samsung"],
+            "answer": "Google"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What is the purpose of an IP address in computer networking?",
+            "choices": ["To identify a website's name", "To locate physical addresses of devices", "To manage printer settings", "To store software applications"],
+            "answer": "To locate physical addresses of devices"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What is the function of an SSD in a computer?",
+            "choices": ["To display images", "To control network connections", "To provide long-term data storage", "To execute mathematical calculations"],
+            "answer": "To provide long-term data storage"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What does the term 'Wi-Fi' stand for?",
+            "choices": ["Wireless Fidelity", "Worldwide Interconnection Facility", "Wired File Transfer", "Wireless Fiber Technology"],
+            "answer": "Wireless Fidelity"
+        },
+
+        {
+            "type": "multiplechoice",
+            "question": "What is the primary function of an antivirus software program?",
+            "choices": ["To create documents", "To optimize computer performance", "To protect against malware and viruses", "To play music"],
+            "answer": "To protect against malware and viruses"
+        },
+        {
+            "type": "multiplechoice",
+            "question": "What is a 'captcha' used for on websites?",
+            "choices": ["To automate data entry", "To verify that the user is human and not a bot", "To display advertisements", "To load website images faster"],
+            "answer": "To verify that the user is human and not a bot"
+        },
+        {
+            "type": "truefalse",
+            "question": "(true/false)Is RAM a type of computer memory?",
+            "answer": "true"
+        },
+        {
+            "type": "truefalse",
+            "question": "(true/false)A CPU is also known as the brain of the computer.",
+            "answer": "true"
+        },
+        {
+            "type": "truefalse",
+            "question": "(true/false)Is a router used to connect multiple devices to a local network?",
+            "answer": "true"
+        },
+        {
+            "type": "truefalse",
+            "question": "(true/false)Is HTML a programming language?",
+            "answer": "false"
+        },
+        {
+            "type": "truefalse",
+            "question": "(true/false)Is a 'cursor' a hardware component of a computer?",
+            "answer": "false"
+        },
+        {
+            "type": "truefalse",
+            "question": "(true/false)Is a 'bit' the smallest unit of digital information?",
+            "answer": "true"
+        },
+        {
+            "type": "truefalse",
+            "question": "(true/false)Is the internet the same as the World Wide Web (WWW)?",
+            "answer": "false"
+        },
+        {
+            "type": "truefalse",
+            "question": "(true/false)Is a modem used to connect a computer to the internet?",
+            "answer": "true"
+        },
+        {
+            "type": "truefalse",
+            "question": "(true/false)Is a 'byte' the smallest unit of digital information?",
+            "answer": "true"
+        },
+        {
+            "type": "identification",
+            "question": "What does the acronym USB stand for?",
+            "answer": "Universal Serial Bus"
+        },
+        {
+            "type": "identification",
+            "question": "What does HTML stand for?",
+            "answer": "Hypertext Markup Language"
+        },
+        {
+            "type": "identification",
+            "question": "What is the file extension for a Word document?",
+            "answer": ".docx"
+        },
+        {
+            "type": "identification",
+            "question": "What is the term for a malicious software that pretends to be something else?",
+            "answer": "Trojan horse"
+        },
+        {
+            "type": "identification",
+            "question": "What does CPU stand for?",
+            "answer": "Central Processing Unit"
+        },
+        {
+            type: "identification",
+            question: "Congrats you have finished the quiz",
+            answer: "1"
+        },
+        ];
+
+        let scoreCount = 0;
+        let timer;
+        let timeLeft = 20;
+
+        function startQuiz() {
+    const username = usernameInput.value.trim();
+    if (username === "") {
+        alert("Please enter your name.");
+        return;
+    }
+    menuContainer.style.display = 'none'; // Hide the menu
+    quizContainer.style.display = 'block'; // Show the quiz
+    displayQuestion();
+    startTimer();
+
+    // Set the user's name in the end quiz panel
+    const userNameDisplay = document.getElementById('user-name-display');
+    userNameDisplay.textContent = `Name: ${username}`;
+}
+
+function displayQuestion() {
+            if (currentQuestionIndex < quizQuestions.length) {
+                const currentQuestion = quizQuestions[currentQuestionIndex];
+
+                question.textContent = currentQuestion.question;
+
+                if (currentQuestion.type === "multiplechoice") {
+                    choicesContainer.innerHTML = "";
+                    userAnswer.style.display = 'none'; // Hide the input field for multiple choice questions
+
+                    currentQuestion.choices.forEach((choice, index) => {
+                        const choiceElement = document.createElement("div");
+                        choiceElement.classList.add("choice");
+                        choiceElement.textContent = `${String.fromCharCode(65 + index)}. ${choice}`;
+                        choiceElement.addEventListener("click", () => selectChoice(choice));
+                        choicesContainer.appendChild(choiceElement);
+                    });
+                } else {
+                    userAnswer.style.display = 'block'; // Show the input field for other question types
+                    choicesContainer.innerHTML = ""; // Clear choices container for non-multiple choice questions
+                }
+            } else {
+                endQuiz();
+            }
+        }
+
+        function selectChoice(choice) {
+            clearInterval(timer); // Stop the timer
+
+            const userAnswerValue = choice || userAnswer.value.trim().toLowerCase();
+            const currentQuestion = quizQuestions[currentQuestionIndex];
+
+            if (userAnswerValue === currentQuestion.answer.toLowerCase()) {
+                scoreCount++;
+            }
+
+            currentQuestionIndex++; // Move to the next question
+
+            if (currentQuestionIndex < quizQuestions.length) {
+                // Display the next question
+                displayQuestion();
+                userAnswer.value = ''; // Clear the input field
+                startTimer();
+            } else {
+                // Quiz completed
+                resultContainer.style.display = 'block';
+                score.textContent = `Score: ${scoreCount} out of ${quizQuestions.length}`;
+                submit.style.display = 'none';
+                userAnswer.style.display = 'none'; // Hide the input field
+                displayCorrectAnswers();
+            }
+        }
+
+        function displayCorrectAnswers() {
+            const correctAnswers = quizQuestions.map(question => question.answer);
+            correctAnswersDropdown.innerHTML = "";
+            correctAnswers.forEach((answer, index) => {
+                const option = document.createElement("option");
+                option.value = index + 1;
+                option.textContent = `Question ${index + 1}: ${answer}`;
+                correctAnswersDropdown.appendChild(option);
+            });
+            correctAnswersContainer.style.display = 'block';
+        }
+
+        submit.addEventListener('click', () => selectChoice(userAnswer.value));
+        retryButton.addEventListener('click', retryQuiz);
+
+        // Add an event listener for the Enter key press on the input field
+        userAnswer.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                selectChoice(userAnswer.value);
+            }
+        });
+
+        function startTimer() {
+            timeLeft = 20;
+            countdownElement.textContent = timeLeft;
+
+            timer = setInterval(() => {
+                timeLeft--;
+                countdownElement.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    selectChoice(null);
+                }
+            }, 1000);
+        }
+
+        function endQuiz() {
+    resultContainer.style.display = 'block';
+    score.textContent = `Score: ${scoreCount} out of the ${quizQuestions.length}`;
+    submit.style.display = 'none';
+    question.style.display = 'none';
+    userAnswer.style.display = 'none'; // Hide the input field
+    displayCorrectAnswers();
+}
+
+        function retryQuiz() {
+            currentQuestionIndex = 0;
+            scoreCount = 0;
+            userAnswer.value = '';
+            resultContainer.style.display = 'none';
+            submit.style.display = 'block';
+            userAnswer.style.display = 'block';
+            correctAnswersContainer.style.display = 'none';
+            startQuiz();
+        }
+
+        startButton.addEventListener('click', startQuiz);
+    </script>
+</body>
+</html>
